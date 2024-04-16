@@ -1,11 +1,13 @@
 const { Sequelize } = require("sequelize");
 
+const sequelize = new Sequelize("toDoListDB", "postgres", "0000", {
+  host: "localhost",
+  dialect: "postgres",
+});
+
+sequelize.sync({ force: false, alter: true });
 const connection = async () => {
   try {
-    const sequelize = new Sequelize("toDoListDB", "postgres", "0000", {
-      host: "localhost",
-      dialect: "postgres",
-    });
     // console.log(sequelize);
     await sequelize.authenticate();
     console.log("Connection has been established successfully.");
@@ -14,4 +16,4 @@ const connection = async () => {
   }
 };
 
-module.exports = connection;
+module.exports = { connection, sequelize };
