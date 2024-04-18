@@ -8,14 +8,29 @@ const Profile = sequelize.define("profile", {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  location: {
+  city: {
     type: DataTypes.STRING,
     allowNull: true,
   }, 
-  website: {
+  speciality: {
     type: DataTypes.STRING,
     allowNull: true,
   },
+  phone: {
+    type: DataTypes.STRING,
+
+    allowNull: true,
+  },
+  gender: {
+    type: DataTypes.ENUM,
+    values: ["male", "female"],
+    defaultValue: "male",
+    allowNull: false,
+  },
+  birthday: {
+    type: DataTypes.DATE,
+    allowNull: true,
+  }
 });
 
 

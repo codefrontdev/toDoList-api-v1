@@ -10,23 +10,17 @@ const SubTask = sequelize.define("subTask", {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  activityId: {
-    type: DataTypes.UUID,
-    allowNull: false,
-  },
-  mainTag: {
-    type: DataTypes.ARRAY(DataTypes.STRING),
-    allowNull: true
-  },
-  subTag: {
-    type: DataTypes.ARRAY(DataTypes.STRING),
-    allowNull: true
-  },
   dueDate: {
     type: DataTypes.DATE,
     allowNull: true,
   },
   priority: {
+    type: DataTypes.ENUM,
+    values: ["low", "medium", "high", "noPriority", "urgent"],
+    defaultValue: "noPriority",
+    allowNull: false,
+  },
+  label: {
     type: DataTypes.STRING,
     allowNull: true,
   },

@@ -12,8 +12,7 @@ exports.createTask = asyncHandler(async (req, res, next) => {
     const userTask = await UserTask.create({
       userId: req.body.userId,
       taskId: task.id,
-    })
-
+    });
 
     res.status(201).json({
       status: "success",
@@ -32,19 +31,20 @@ exports.getTasks = asyncHandler(async (req, res) => {
   const skip = (page - 1) * limit;
 
   try {
-    if(page < 1 || limit < 1) {
+    if (page < 1 || limit < 1) {
       throw new Error("page and limit should be positive");
     }
 
-
     const tasks = await Task.findAll({
-        include: [{
-          model: User,
-        }],
+      include: [
+        {
+          all: true
+        },
+      ],
       limit: limit,
       offset: skip,
     });
-    
+
     if (!tasks) {
       throw new Error("Could not find tasks");
     }
