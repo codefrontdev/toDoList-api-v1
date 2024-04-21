@@ -13,7 +13,8 @@ passport.use(
     {
       clientID: GITHUB_CLIENT_ID,
       clientSecret: GITHUB_CLIENT_SECRET,
-      callbackURL: "http://localhost:5000/api/v1/auth/github/callback",
+      callbackURL:
+        "https://todolist-api-v1.onrender.com/api/v1/auth/github/callback",
       scope: ["user:email"],
     },
     async function (accessToken, refreshToken, profile, done) {
@@ -25,7 +26,6 @@ passport.use(
       };
 
       try {
-
         console.log(defaultUser);
         const user = await User.findOrCreate({
           where: { githubId: profile.id },
@@ -33,13 +33,12 @@ passport.use(
         });
 
         if (!user) {
-          return new ApiError('Couldn\'t find user', 404);
+          return new ApiError("Couldn't find user", 404);
         }
         done(null, user);
       } catch (error) {
         done(error, null);
       }
-
     }
   )
 );
