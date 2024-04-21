@@ -8,7 +8,7 @@ const SubTask = sequelize.define("subTask", {
   },
   description: {
     type: DataTypes.STRING,
-    allowNull: true,
+    allowNull: false,
   },
   dueDate: {
     type: DataTypes.DATE,

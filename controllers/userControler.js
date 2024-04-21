@@ -16,7 +16,7 @@ exports.getUsers = asyncHandler(async (req, res) => {
       const users = await User.findAll({
         attributes: ['id', 'fullName', 'email'],
         include: {
-          model: Task,
+          all: true,
         },
       limit: limit,
       offset: skip,
@@ -33,7 +33,11 @@ exports.getUsers = asyncHandler(async (req, res) => {
 
 exports.getUserById = asyncHandler(async (req, res, next) => {
   try {
-      const user = await User.findByPk(+req.params.id);
+    const user = await User.findByPk(req.params.id, {
+        include: {
+            all: true
+        }
+      });
       
       if (!user) { 
           return next(new ApiError(`User not found with id ${req.params.id}`, 404))

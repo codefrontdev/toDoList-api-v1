@@ -38,7 +38,8 @@ exports.getTasks = asyncHandler(async (req, res) => {
     const tasks = await Task.findAll({
       include: [
         {
-          all: true
+          all: true,
+          nested: true,
         },
       ],
       limit: limit,
@@ -60,7 +61,12 @@ exports.getTasks = asyncHandler(async (req, res) => {
 
 exports.getTaskById = asyncHandler(async (req, res, next) => {
   try {
-    const task = await Task.findByPk(req.params.id);
+    const task = await Task.findByPk(req.params.id, {
+      include: {
+        all: true,
+        nested: true,
+      },
+    });
 
     if (!task) {
       return next(new ApiError(`task not found with id ${req.params.id}`, 404));

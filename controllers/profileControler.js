@@ -8,7 +8,12 @@ const asyncHandler = require('express-async-handler')
 
 exports.createProfile = asyncHandler(async (req, res, next) => {
   try {
-    const profile = await Profile.create(req.body);
+    const profile = await Profile.create(req.body, {
+      include: {
+        all: true,
+        nested: true,
+     }
+    });
     res.status(201).json({
       status: "success",
       data: profile,
@@ -30,8 +35,8 @@ exports.getProfiles = asyncHandler(async (req, res) => {
     try {
       const profiles = await Profile.findAll({
         include: {
-          model: User,
-          include: Task
+          all: true,
+          nested: true,
         },
       limit: limit,
       offset: skip,
@@ -48,7 +53,12 @@ exports.getProfiles = asyncHandler(async (req, res) => {
 
 exports.getProfileById = asyncHandler(async (req, res, next) => {
   try {
-      const profile = await Profile.findByPk(req.params.id);
+    const profile = await Profile.findByPk(req.params.id, {
+      include: {
+        all: true, 
+        nested: true
+        }
+      });
       
       if (!profile) { 
           return next(new ApiError(`profile not found with id ${req.params.id}`, 404))
@@ -66,7 +76,7 @@ exports.updateprofile = asyncHandler(async (req, res, next) => {
   try {
     const profile = await Profile.update(req.body, {
       where: {
-        id: +req.params.id,
+        id: req.params.id,
       },
     });
       
