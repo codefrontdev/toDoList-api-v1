@@ -2,6 +2,20 @@ const {Comment} = require("../models");
 const ApiError = require("../utils/ApiError");
 const asyncHandler = require("express-async-handler");
 
+
+
+exports.createComment = asyncHandler(async (req, res, next) => {
+  try {
+    const comment = await Comment.create(req.body);
+    res.status(201).json({
+      status: "success",
+      data: comment,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+})
+
 exports.getComments = asyncHandler(async (req, res) => {
 
   const page = req.query.page * 1 || 1;

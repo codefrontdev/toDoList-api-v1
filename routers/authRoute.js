@@ -1,24 +1,35 @@
 const router = require("express").Router();
 const passport = require("passport");
-const { generateToken, verifyRefreshToken } = require("../middleware/tokenMiddleware");
+const {
+  generateToken,
+  verifyRefreshToken,
+} = require("../middleware/tokenMiddleware");
 const ApiError = require("../utils/ApiError");
 
-
-
-router.post('/refresh', verifyRefreshToken, async (req, res, next) => {
+router.post("/refresh", verifyRefreshToken, async (req, res, next) => {
   const { refresh } = req.body;
   console.log(refresh);
   if (!refresh) {
-    return next(new ApiError("No refresh token provided", 401, "No refresh token provided"));
+    return next(
+      new ApiError(
+        "No refresh token provided",
+        401,
+        "No refresh token provided"
+      )
+    );
   }
-  
-  const accessToken = await generateToken(req.userId, '14m', process.env.ACCESS_TOKEN_SECRET);
+
+  const accessToken = await generateToken(
+    req.userId,
+    "14m",
+    process.env.ACCESS_TOKEN_SECRET
+  );
   res.status(200).json({
     accessToken,
     status: "success",
     message: "token refreshed",
-  })
-})
+  });
+});
 
 router.get(
   "/github",
@@ -35,14 +46,23 @@ router.get(
     session: false,
   }),
   async function (req, res) {
-
     console.log(req.user[0]);
-    const accessToken = await generateToken(req?.user[0].githubId, '14m', process.env.ACCESS_TOKEN_SECRET);
-    const refreshToken = await generateToken(req?.user[0].githubId, '7d', process.env.REFRESH_TOKEN_SECRET);
+    const accessToken = await generateToken(
+      req?.user[0].githubId,
+      "14m",
+      process.env.ACCESS_TOKEN_SECRET
+    );
+    const refreshToken = await generateToken(
+      req?.user[0].githubId,
+      "7d",
+      process.env.REFRESH_TOKEN_SECRET
+    );
     
-    req.user = { ...req?.user, refreshToken, accessToken }
+    req.user = { ...req?.user[0].dataValues, refreshToken, accessToken };
+    
     
     const user = JSON.stringify(req?.user);
+    console.log(user);
 
     res.status(200).send(`<!DOCTYPE html>
 <html lang="en">
@@ -55,7 +75,9 @@ router.get(
 <body>
     <h1>Welcome ${req?.user?.fullName}</h1>
     <script>
-    window.opener.postMessage(${user}, 'http://localhost:3000')
+    window.opener.postMessage(${
+      req.user.isActive ? user : JSON.stringify({message: "pleass wait for admin approval"})
+    }, 'http://localhost:3000')
     </script>
 </body>
 </html>`);

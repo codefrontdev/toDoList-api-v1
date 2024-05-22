@@ -9,7 +9,10 @@ const Task = sequelize.define("task", {
     allowNull: false,
   },
   description: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT(),
+    validate: {
+      len: [500],
+    },
     allowNull: false,
   },
   dueDate: {

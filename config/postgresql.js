@@ -1,20 +1,12 @@
 const { Sequelize } = require("sequelize");
-require('dotenv').config();
+require("dotenv").config();
 
-const sequelize = new Sequelize(
-  process.env.DB_URL,
-  {
-    // port: process.env.DB_PORT,
-    dialect: "postgres",
-    logging: false,
-    dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false,
-      },
-    },
-  }
-);
+const sequelize = new Sequelize("toDoListDB", "postgres", "0000", {
+  dialect: "postgres",
+  port: 5432,
+  host: "localhost",
+  logging: false
+});
 
 sequelize.sync({ force: false, alter: true });
 const connection = async () => {

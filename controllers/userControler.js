@@ -4,7 +4,7 @@ const ApiError = require("../utils/ApiError");
 const asyncHandler = require('express-async-handler')
 
 exports.getUsers = asyncHandler(async (req, res) => {
-    console.log(req.user);
+    
     
   const page = req.query.page * 1 || 1;
   const limit = req.query.limit * 1 || 5;
@@ -14,7 +14,7 @@ exports.getUsers = asyncHandler(async (req, res) => {
 //   if (req.params.id) filterObject = { category: req.params.categoryId };
     try {
       const users = await User.findAll({
-        attributes: ['id', 'fullName', 'email'],
+        attributes: ['id', 'fullName', 'email', "picture"],
         include: {
           all: true,
         },

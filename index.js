@@ -50,6 +50,7 @@ app.use("/api/v1/user", require("./routers/userRoute"));
 app.use("/api/v1/profile", require("./routers/profileRoute"));
 app.use("/api/v1/task", require("./routers/taskRoute"));
 app.use("/api/v1/sub-task", require("./routers/subTaskRoute"));
+app.use("/api/v1/comment", require("./routers/commentRoute"));
 app.use("/api/v1/workspace", require("./routers/workspaceRoute"));
 
 // Error Api

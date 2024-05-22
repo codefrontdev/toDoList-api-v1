@@ -1,25 +1,35 @@
-const { Task, SubTask, User, UserTask } = require("../models");
+const { Task, SubTask, User, user_task } = require("../models");
 const ApiError = require("../utils/ApiError");
 const asyncHandler = require("express-async-handler");
 
 exports.createTask = asyncHandler(async (req, res, next) => {
+  console.log(req.body);
   try {
     const task = await Task.create(req.body);
     if (!task) {
       return next(new ApiError("Could not create task", 400));
     }
 
-    const userTask = await UserTask.create({
-      userId: req.body.userId,
-      taskId: task.id,
-    });
+    if (Array.isArray(req.body.userId) && req.body.userId.length > 0) {
+      const newUserTasks = req.body.userId.map((taskId) => ({
+        userId: taskId,
+        taskId: task.id,
+      }));
 
-    res.status(201).json({
-      status: "success",
-      data: {
-        task: task,
-      },
-    });
+      const userTask = await user_task.bulkCreate(newUserTasks);
+      res.status(201).json({
+        status: "success",
+        data: {
+          task: task,
+        },
+      });
+    } else {
+      res.status(400).json({
+        status: false,
+      });
+
+    }
+
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
